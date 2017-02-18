@@ -4,13 +4,17 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+
+import fr.sheol.overlay.drawer.ServiceLoader;
 
 /**
  * Created by Sheol on 16/02/2017.
  */
 public class DataReceiver extends BroadcastReceiver {
-    private static final String ACTIVITY_ENABLE = "fr.sheol.overlay.drawer.ACTIVITY_ENABLE";
-    private static final String OVERLAY_PERM = "fr.sheol.overlay.drawer.OVERLAY_PERM";
+    public static final String ACTIVITY_ENABLE = "fr.sheol.overlay.drawer.ACTIVITY_ENABLE";
+    public static final String OVERLAY_PERM = "fr.sheol.overlay.drawer.OVERLAY_PERM";
+    public static final String REMOTE_OPEN = "fr.sheol.overlay.drawer.REMOTE_OPEN";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -29,6 +33,10 @@ public class DataReceiver extends BroadcastReceiver {
 
     private void enableServiceLoader(Context context) {
         new ServiceLoader(context).run();
+    }
+
+    public static void sendRemoteOpen(Context context) {
+        sendEvent(context, REMOTE_OPEN);
     }
 
     public static void sendActivityEnableEvent(Context context) {

@@ -11,6 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name="fr.sheol.overlay.drawer.MainActivity"
             android:launchMode="singleInstance">
@@ -32,12 +33,13 @@
         </activity>
 
         <service
-            android:name="fr.sheol.overlay.drawer.SidebarService"
+            android:name="fr.sheol.overlay.drawer.service.drawer.SidebarService"
             android:enabled="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:process=":sidebar"
             android:stopWithTask="false" />
+        
         <receiver android:name="fr.sheol.overlay.drawer.DataReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

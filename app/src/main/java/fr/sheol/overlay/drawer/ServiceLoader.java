@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
 
+import fr.sheol.overlay.drawer.service.drawer.SidebarService;
+
 /**
  * Created by Sheol on 16/02/2017.
  */

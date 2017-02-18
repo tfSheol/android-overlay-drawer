@@ -1,15 +1,18 @@
-package fr.sheol.overlay.drawer;
+package fr.sheol.overlay.drawer.service.drawer;
 
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,6 +20,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ListView;
+
+import fr.sheol.overlay.drawer.DataReceiver;
+import fr.sheol.overlay.drawer.R;
+import fr.sheol.overlay.drawer.ServiceLoader;
 
 /**
  * Created by Sheol on 14/02/2017.
@@ -30,7 +37,6 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
     private WindowManager windowManager;
     private CustomDrawerLayout drawerLayout;
     private EventDrawerReceiver eventDrawerReceiver;
-    private IntentFilter evenDrawerReceiverFilter;
 
     @Nullable
     @Override
@@ -43,7 +49,7 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
         super.onCreate();
         final LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        drawerLayout = (CustomDrawerLayout) inflater.inflate(R.layout.activity_main, null);
+        drawerLayout = (CustomDrawerLayout) inflater.inflate(R.layout.drawer_overlay, null);
         drawerLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -55,7 +61,6 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
         if (ServiceLoader.checkOverlayPerm(this)) {
             windowManager.addView(drawerLayout, getParams(overlaySize,
                     WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE));
-            evenDrawerReceiverFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
             eventDrawerReceiver = new EventDrawerReceiver();
             eventDrawerReceiver.setDrawerReceiverListener(this);
             runningInBackground();
@@ -68,10 +73,12 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
         NotificationCompat.Builder notification = new NotificationCompat.Builder(getBaseContext());
         notification.setPriority(Notification.PRIORITY_MIN);
         startForeground(NOTIFICATION_BACKGROUND_ID, notification.build());
+        registerReceiver();
     }
 
     private void registerReceiver() {
-        getBaseContext().registerReceiver(eventDrawerReceiver, evenDrawerReceiverFilter);
+        getBaseContext().registerReceiver(eventDrawerReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+        getBaseContext().registerReceiver(eventDrawerReceiver, new IntentFilter(DataReceiver.REMOTE_OPEN));
     }
 
     private void unregisterReceiver() {
@@ -111,13 +118,11 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
 
     @Override
     public void onDrawerOpened(View drawerView) {
-        registerReceiver();
     }
 
     @Override
     public void onDrawerClosed(View drawerView) {
         closeLayoutDrawer(windowManager, drawerLayout);
-        unregisterReceiver();
     }
 
     @Override
@@ -162,6 +167,17 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
     @Override
     public void onHomeKeyListener() {
         drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    @Override
+    public void onRemoteOpen() {
+        openLayoutDrawer(windowManager, drawerLayout);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
     }
 
     @Override

@@ -1,4 +1,4 @@
-package fr.sheol.overlay.drawer;
+package fr.sheol.overlay.drawer.service.drawer;
 
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;

@@ -1,8 +1,11 @@
-package fr.sheol.overlay.drawer;
+package fr.sheol.overlay.drawer.service.drawer;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+
+import fr.sheol.overlay.drawer.DataReceiver;
 
 /**
  * Created by Sheol on 16/02/2017.
@@ -16,6 +19,9 @@ public class EventDrawerReceiver extends BroadcastReceiver {
             case Intent.ACTION_CLOSE_SYSTEM_DIALOGS:
                 drawerReceiverListener.onHomeKeyListener();
                 break;
+            case DataReceiver.REMOTE_OPEN:
+                drawerReceiverListener.onRemoteOpen();
+                break;
         }
     }
 
@@ -25,5 +31,7 @@ public class EventDrawerReceiver extends BroadcastReceiver {
 
     interface DrawerReceiverListener {
         void onHomeKeyListener();
+
+        void onRemoteOpen();
     }
 }
