@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import fr.sheol.overlay.drawer.DataReceiver;
@@ -57,7 +58,7 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
         drawerLayout.findViewById(R.id.drawer_panel).setOnClickListener(this);
         drawerLayout.setOnTouchListener(this);
         drawerLayout.setOnDispatchKeyEventPreIme(this);
-        new AppData(getBaseContext(), (ListView) drawerLayout.findViewById(R.id.left_drawer), this);
+        new AppData(getBaseContext(), (GridView) drawerLayout.findViewById(R.id.left_drawer), this);
         if (ServiceLoader.checkOverlayPerm(this)) {
             windowManager.addView(drawerLayout, getParams(overlaySize,
                     WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE));
@@ -71,6 +72,8 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
 
     private void runningInBackground() {
         NotificationCompat.Builder notification = new NotificationCompat.Builder(getBaseContext());
+        notification.setSmallIcon(R.drawable.ic_notification);
+        // TODO: 24/02/2017 add more information about current running service in a notification 
         notification.setPriority(Notification.PRIORITY_MIN);
         startForeground(NOTIFICATION_BACKGROUND_ID, notification.build());
         registerReceiver();

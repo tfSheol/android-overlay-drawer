@@ -1,6 +1,8 @@
 package fr.sheol.overlay.drawer;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -11,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 
 import fr.sheol.overlay.drawer.app.HomeFragment;
@@ -54,12 +57,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initActionBar() {
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_notification);
         actionBar.setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 18/02/2017 open drawer on clicked!
                 DataReceiver.sendRemoteOpen(getBaseContext());
             }
         });
