@@ -167,15 +167,15 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
         return initialState;
     }
 
-    @Override
-    public void onHomeKeyListener() {
-        drawerLayout.closeDrawer(GravityCompat.START);
-    }
+        @Override
+        public void onHomeKeyListener() {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
 
-    @Override
-    public void onRemoteOpen() {
-        openLayoutDrawer(windowManager, drawerLayout);
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        @Override
+        public void onRemoteOpen() {
+            openLayoutDrawer(windowManager, drawerLayout);
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 drawerLayout.openDrawer(GravityCompat.START);
