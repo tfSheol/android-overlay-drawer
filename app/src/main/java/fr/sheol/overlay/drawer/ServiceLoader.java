@@ -32,8 +32,8 @@ public class ServiceLoader extends Thread {
         }
     }
 
+    @SuppressWarnings("all")
     public static boolean checkOverlayPerm(Context context) {
-        //noinspection SimplifiableIfStatement
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return Settings.canDrawOverlays(context);
         }

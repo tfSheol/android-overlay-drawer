@@ -22,6 +22,13 @@ public class EventDrawerReceiver extends BroadcastReceiver {
             case DataReceiver.REMOTE_OPEN:
                 drawerReceiverListener.onRemoteOpen();
                 break;
+            case Intent.ACTION_SCREEN_OFF:
+                drawerReceiverListener.onScreenOff();
+                break;
+            case Intent.ACTION_CALL:
+                drawerReceiverListener.onCall();
+                break;
+            // TODO: 04/03/2017 find how close drawer when notification was clicked!
         }
     }
 
@@ -30,6 +37,12 @@ public class EventDrawerReceiver extends BroadcastReceiver {
     }
 
     interface DrawerReceiverListener {
+        void onNotificationClicked();
+
+        void onCall();
+
+        void onScreenOff();
+
         void onHomeKeyListener();
 
         void onRemoteOpen();
