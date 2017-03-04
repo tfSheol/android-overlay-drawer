@@ -46,6 +46,7 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
     }
 
     @Override
+    @SuppressWarnings("all")
     public void onCreate() {
         super.onCreate();
         final LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -73,7 +74,10 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
     private void runningInBackground() {
         NotificationCompat.Builder notification = new NotificationCompat.Builder(getBaseContext());
         notification.setSmallIcon(R.drawable.ic_notification);
-        // TODO: 24/02/2017 add more information about current running service in a notification 
+        notification.setContentTitle(getString(R.string.app_name));
+        notification.setContentText(getString(R.string.app_info));
+        // TODO: 24/02/2017 add more information about current running service in a notification
+        // TODO: 04/03/2017 add click listener for open panel app
         notification.setPriority(Notification.PRIORITY_MIN);
         startForeground(NOTIFICATION_BACKGROUND_ID, notification.build());
         registerReceiver();
@@ -165,6 +169,24 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
             drawerLayout.closeDrawer(GravityCompat.START);
         }
         return initialState;
+    }
+
+    @Override
+    public void onNotificationClicked() {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        // TODO: 04/03/2017 add custum launch option for app launched
+    }
+
+    @Override
+    public void onCall() {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        // TODO: 04/03/2017 add more options about calling action
+    }
+
+    @Override
+    public void onScreenOff() {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        // TODO: 04/03/2017 standby updater service & add onScreenOn for resume it
     }
 
     @Override

@@ -1,6 +1,19 @@
 <resources>
     <string name="app_name">Efficient Drawer</string>
+    <string name="app_info">Le drawer est actuellement en cour d'exécution vous pouvez le controller en ouvrant le panel.</string>
+
+    <!-- home -->
     <string name="home">Accueil</string>
     <string name="settings">Options</string>
     <string name="about">A propos</string>
+
+    <!-- Settings -->
+    <string name="enable_service">Active le service</string>
+    <string name="enable_service_desc">Activer le service principal</string>
+    <string name="enable_option">Afficher le bouton options</string>
+    <string name="enable_option_desc">Affiche le bouton options sur le drawer</string>
+    <string name="enable_profile_system">Afficher le gestionaire de profiles</string>
+    <string name="enable_profile_system_desc">Affiche le système de profil dans le drawer</string>
+    <string name="enable_header">Afficher le header</string>
+    <string name="enable_header_desc">Affiche le header et toutes ses options dans l'entête du drawer</string>
 </resources>

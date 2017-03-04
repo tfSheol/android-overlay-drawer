@@ -3,13 +3,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <SwitchPreference
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:defaultValue="true"
+        android:key="enable_service"
+        android:summary="@string/enable_service_desc"
+        android:title="@string/enable_service" />
+
     <CheckBoxPreference
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:defaultValue="false"
-        android:key="test2"
-        android:summary="test"
-        android:title="test" />
+        android:defaultValue="true"
+        android:key="enable_option"
+        android:summary="@string/enable_option_desc"
+        android:title="@string/enable_option" />
+
+    <CheckBoxPreference
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:defaultValue="true"
+        android:key="enable_profile_system"
+        android:summary="@string/enable_profile_system"
+        android:title="@string/enable_profile_system_desc" />
+
+    <CheckBoxPreference
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:defaultValue="true"
+        android:key="enable_header"
+        android:summary="@string/enable_header_desc"
+        android:title="@string/enable_header" />
 
     <ListPreference
         android:layout_width="match_parent"

@@ -2,13 +2,10 @@ package fr.sheol.overlay.drawer.service.drawer;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
