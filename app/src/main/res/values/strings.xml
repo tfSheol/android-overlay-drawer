@@ -8,7 +8,7 @@
     <string name="about">A propos</string>
 
     <!-- Settings -->
-    <string name="enable_service">Active le service</string>
+    <string name="enable_service">Activer le service</string>
     <string name="enable_service_desc">Activer le service principal</string>
     <string name="enable_option">Afficher le bouton options</string>
     <string name="enable_option_desc">Affiche le bouton options sur le drawer</string>
