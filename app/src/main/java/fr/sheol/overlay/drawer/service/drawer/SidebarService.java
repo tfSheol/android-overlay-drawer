@@ -1,18 +1,20 @@
 package fr.sheol.overlay.drawer.service.drawer;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,7 +22,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.GridView;
-import android.widget.ListView;
 
 import fr.sheol.overlay.drawer.DataReceiver;
 import fr.sheol.overlay.drawer.R;
@@ -34,7 +35,7 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
         EventDrawerReceiver.DrawerReceiverListener, AppData.ApplicationListener {
     public static final int FLAG_NULL = 0x00000000;
     public static final int NOTIFICATION_BACKGROUND_ID = 4367;
-    private static final int overlaySize = 10;
+    private static final int OVERLAY_SIZE = 10;
     private WindowManager windowManager;
     private CustomDrawerLayout drawerLayout;
     private EventDrawerReceiver eventDrawerReceiver;
@@ -61,8 +62,9 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
         drawerLayout.setOnDispatchKeyEventPreIme(this);
         new AppData(getBaseContext(), (GridView) drawerLayout.findViewById(R.id.left_drawer), this);
         if (ServiceLoader.checkOverlayPerm(this)) {
-            windowManager.addView(drawerLayout, getParams(overlaySize,
-                    WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE));
+            windowManager.addView(drawerLayout,
+                    getParams(OVERLAY_SIZE, WindowManager.LayoutParams.MATCH_PARENT,
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE));
             eventDrawerReceiver = new EventDrawerReceiver();
             eventDrawerReceiver.setDrawerReceiverListener(this);
             runningInBackground();
@@ -104,14 +106,16 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
     }
 
     private void closeLayoutDrawer(WindowManager windowManager, DrawerLayout drawerLayout) {
-        windowManager.updateViewLayout(drawerLayout, getParams(overlaySize,
+        windowManager.updateViewLayout(drawerLayout, getParams(OVERLAY_SIZE,
                 WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE));
     }
 
     private WindowManager.LayoutParams getParams(int width, int height, int focus) {
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 width, height,
-                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.O ?
+                        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT :
+                        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                 focus | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
         params.gravity = Gravity.START;
@@ -119,16 +123,17 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
     }
 
     @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
-
+    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+        // Do nothing
     }
 
     @Override
-    public void onDrawerOpened(View drawerView) {
+    public void onDrawerOpened(@NonNull View drawerView) {
+        // Do nothing
     }
 
     @Override
-    public void onDrawerClosed(View drawerView) {
+    public void onDrawerClosed(@NonNull View drawerView) {
         closeLayoutDrawer(windowManager, drawerLayout);
     }
 
@@ -145,6 +150,8 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
                 break;
             case DrawerLayout.STATE_SETTLING:
                 break;
+            default:
+                break;
         }
     }
 
@@ -153,6 +160,7 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
         // TODO: 16/02/2017 add interface listener for catch click event in other layout
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -194,15 +202,10 @@ public class SidebarService extends Service implements DrawerLayout.DrawerListen
         drawerLayout.closeDrawer(GravityCompat.START);
     }
 
-        @Override
-        public void onRemoteOpen() {
-            openLayoutDrawer(windowManager, drawerLayout);
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+    @Override
+    public void onRemoteOpen() {
+        openLayoutDrawer(windowManager, drawerLayout);
+        new Handler(Looper.getMainLooper()).post(() -> drawerLayout.openDrawer(GravityCompat.START));
     }
 
     @Override

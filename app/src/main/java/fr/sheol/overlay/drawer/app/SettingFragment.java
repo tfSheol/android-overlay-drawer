@@ -3,7 +3,6 @@ package fr.sheol.overlay.drawer.app;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.util.Log;
 
 import fr.sheol.overlay.drawer.R;
 

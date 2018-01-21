@@ -4,9 +4,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-
-import fr.sheol.overlay.drawer.ServiceLoader;
 
 /**
  * Created by Sheol on 16/02/2017.
@@ -18,7 +15,7 @@ public class DataReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        switch (intent.getAction()) {
+        switch (intent.getAction() != null ? intent.getAction() : OVERLAY_PERM) {
             case BluetoothAdapter.ACTION_STATE_CHANGED:
             case Intent.ACTION_BOOT_COMPLETED:
             case Intent.ACTION_USER_INITIALIZE:
@@ -28,11 +25,13 @@ public class DataReceiver extends BroadcastReceiver {
                 break;
             case Intent.ACTION_CLOSE_SYSTEM_DIALOGS:
                 break;
+            default:
+                break;
         }
     }
 
     private void enableServiceLoader(Context context) {
-        new ServiceLoader(context).run();
+        new ServiceLoader(context).start();
     }
 
     public static void sendRemoteOpen(Context context) {

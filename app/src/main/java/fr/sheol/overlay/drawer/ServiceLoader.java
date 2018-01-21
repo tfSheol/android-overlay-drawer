@@ -27,8 +27,14 @@ public class ServiceLoader extends Thread {
     }
 
     private void startSidebarService() {
-        if (!isMyServiceRunning(SidebarService.class)) {
+        if (!isMyServiceRunning("sidebar")) {
             context.startService(new Intent(context, SidebarService.class));
+        }
+    }
+
+    public void startService(Class<?> service) {
+        if (!isMyServiceRunning(service.getSimpleName().replace("Service", "").toLowerCase())) {
+            context.startService(new Intent(context, service));
         }
     }
 
@@ -40,11 +46,14 @@ public class ServiceLoader extends Thread {
         return true;
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
+    private boolean isMyServiceRunning(String serviceName) {
+        final String servicePackage = context.getPackageName() + ":" + serviceName;
+        final ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager != null) {
+            for (ActivityManager.RunningAppProcessInfo runningApp : manager.getRunningAppProcesses()) {
+                if (servicePackage.equals(runningApp.processName)) {
+                    return true;
+                }
             }
         }
         return false;

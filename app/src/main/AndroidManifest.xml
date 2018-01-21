@@ -39,7 +39,7 @@
             android:label="@string/app_name"
             android:process=":sidebar"
             android:stopWithTask="false" />
-        
+
         <receiver android:name="fr.sheol.overlay.drawer.DataReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
